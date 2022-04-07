@@ -6,7 +6,7 @@
 // TODO 定義所謂的 '一個字'
 
 // TODO -program-
-// TODO 拆分 component ?
+// TODO 用 context provider 等把 資料傳下去、然後在 Question 那層 component 實作 currentQuestion 相關的樣式
 
 import React, { useEffect, useMemo, useState } from 'react'
 
