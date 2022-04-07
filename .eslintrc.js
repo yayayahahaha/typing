@@ -14,6 +14,13 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
-    'space-before-function-paren': ['error', 'never'] // function 和 name 中間不能有空白: prettier 規定的
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'never'
+      }
+    ] // function 和 name 中間不能有空白: prettier 規定的
   }
 }
