@@ -1,11 +1,14 @@
+// TODO -feature-
 // TODO 倒數計時?
 // TODO 打幾個字統計時間?
 // TODO 重置按鈕
 // TODO 套用設定按鈕: 時間多長、或是要打幾個字
 // TODO 定義所謂的 '一個字'
+
+// TODO -program-
 // TODO 拆分 component ?
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import chanceInit from 'chance'
 import { v4 } from 'uuid'
@@ -21,42 +24,44 @@ function App() {
   const [inputText, setInputText] = useState('')
   const [textList, setTextList] = useState(animalList)
 
-  const keyUpHandler = function (event) {
-    const code = event.code
+  // 當前的題目
+  const currentQuestion = useMemo(() => textList[currentIndex])
+  // 當前題目的樣式: typing, good, bad
+  const currentClass = useMemo(() => {
     const checkInput = inputText.trim()
-    const currentQuestion = textList[currentIndex]
     const reg = new RegExp(`^${checkInput}`)
 
-    if (code !== 'Space') {
-      let typingClass = 'typing '
-
-      switch (true) {
-        case !checkInput:
-          break
-        case reg.test(currentQuestion.text):
-          typingClass += 'good'
-          break
-        case !reg.test(currentQuestion.text):
-        case checkInput.length > currentQuestion.text.length:
-          typingClass += 'bad'
-          break
-      }
-
-      return setTextInfo(currentQuestion, { className: typingClass })
+    let typingClass = 'typing '
+    switch (true) {
+      case !checkInput:
+        break
+      case reg.test(currentQuestion.text):
+        typingClass += 'good'
+        break
+      case !reg.test(currentQuestion.text):
+      case checkInput.length > currentQuestion.text.length:
+        typingClass += 'bad'
+        break
     }
 
+    return typingClass
+  })
+
+  const keyUpHandler = function (event) {
+    const code = event.code
+    if (code !== 'Space') return
+
+    // 使用者按了空白，也就是送出
+    const checkInput = inputText.trim()
     const pass = checkInput === currentQuestion.text
+
+    // 把當前的這個項目的結果設定樣式
     setTextInfo(currentQuestion, { className: pass ? 'pass' : 'wrong' })
 
-    const nextIndex = currentIndex + 1
-    setCurrentIndex(nextIndex)
-    const nextQuestion = textList[nextIndex]
+    // 移動題目
+    setCurrentIndex(i => i + 1)
 
-    // TODO 這邊要不要改寫成類似 className 是 computed 的做法、
-    // 然後在 for 迴圈那邊使用 if index === currentIndex 的方式做自動綁定?
-
-    setTextInfo(nextQuestion, { className: 'typing' })
-
+    // 清空輸入框
     setInputText('')
   }
   const onChangeHandler = function (event) {
@@ -65,22 +70,21 @@ function App() {
   }
 
   useEffect(() => {
+    // 幫第一筆綁上 typing 的樣式
     const firstText = textList[currentIndex]
     setTextInfo(firstText, { className: 'typing' })
   }, [])
 
-  function setTextInfo(target, attribute) {
-    const list = textList.map(item => {
-      if (item.id !== target.id) return item
-      return Object.assign(item, attribute)
-    })
+  function setTextInfo(tId, attribute) {
+    // 這裡應該有一個不用更新整個陣列的方式?
+    const list = textList.map(item => Object.assign(item, tId === item.id ? attribute : {}))
     setTextList(list)
   }
 
   return (
     <div className="App">
       {textList.map(item => (
-        <span className={item.className} key={`${item.id}-word`}>
+        <span className={item.id === currentQuestion.id ? currentClass : item.className} key={`${item.id}-word`}>
           {item.text}
         </span>
       ))}
