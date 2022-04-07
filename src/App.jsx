@@ -76,7 +76,7 @@ function App() {
     setTextInfo(firstText, { className: 'typing' })
   }, [])
 
-  function setTextInfo(tId, attribute) {
+  function setTextInfo({ id: tId }, attribute) {
     // 這裡應該有一個不用更新整個陣列的方式?
     const list = textList.map(item => Object.assign(item, tId === item.id ? attribute : {}))
     setTextList(list)
