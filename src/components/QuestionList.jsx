@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Question from './Question'
+
 QuestionList.propTypes = {
   list: PropTypes.array,
   currentQuestion: PropTypes.object,
@@ -13,9 +15,7 @@ function QuestionList(props) {
   return (
     <>
       {list.map(item => (
-        <span className={item.id === currentQuestion.id ? currentClass : item.className} key={`${item.id}-word`}>
-          {item.text}
-        </span>
+        <Question key={item.id} item={item} currentQuestion={currentQuestion} currentClass={currentClass} />
       ))}
     </>
   )
