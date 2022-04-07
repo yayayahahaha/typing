@@ -1,9 +1,11 @@
 // TODO -feature-
+// TODO 重置按鈕
+// TODO 自動把要輸入的放到眼前
 // TODO 倒數計時?
 // TODO 打幾個字統計時間?
-// TODO 重置按鈕
 // TODO 套用設定按鈕: 時間多長、或是要打幾個字
 // TODO 定義所謂的 '一個字'
+// TODO 樣式
 
 // TODO -program-
 // TODO 用 context provider 等把 資料傳下去、然後在 Question 那層 component 實作 currentQuestion 相關的樣式
@@ -28,6 +30,7 @@ function App() {
   // 當前的題目
   const currentQuestion = useMemo(() => textList[currentIndex])
   // 當前題目的樣式: typing, good, bad
+  // TODO 這個應該可以放到最子層的 component
   const currentClass = useMemo(() => {
     const checkInput = inputText.trim()
     const reg = new RegExp(`^${checkInput}`)
