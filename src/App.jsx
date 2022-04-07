@@ -25,20 +25,23 @@ function App() {
     const code = event.code
     const checkInput = inputText.trim()
     const currentQuestion = textList[currentIndex]
-    const reg = new RegExp(`^${checkInput}`) // NEXT TODO 這裡的判斷要詳細些?
+    const reg = new RegExp(`^${checkInput}`)
 
     if (code !== 'Space') {
-      let typingClass = 'typing'
+      let typingClass = 'typing '
 
-      if (!checkInput) {
-        typingClass = 'typing'
-      } else if (reg.test(currentQuestion.text)) {
-        typingClass = 'typing good'
-      } else if (!reg.test(currentQuestion.text)) {
-        typingClass = 'typing bad'
-      } else if (checkInput.length > currentQuestion.text.length) {
-        typingClass = 'typing bad'
+      switch (true) {
+        case !checkInput:
+          break
+        case reg.test(currentQuestion.text):
+          typingClass += 'good'
+          break
+        case !reg.test(currentQuestion.text):
+        case checkInput.length > currentQuestion.text.length:
+          typingClass += 'bad'
+          break
       }
+
       return setTextInfo(currentQuestion, { className: typingClass })
     }
 
