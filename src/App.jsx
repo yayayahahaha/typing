@@ -12,6 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import chanceInit from 'chance'
 import { v4 } from 'uuid'
+import QuestionList from './components/QuestionList.jsx'
 
 import './App.css'
 
@@ -83,11 +84,7 @@ function App() {
 
   return (
     <div className="App">
-      {textList.map(item => (
-        <span className={item.id === currentQuestion.id ? currentClass : item.className} key={`${item.id}-word`}>
-          {item.text}
-        </span>
-      ))}
+      <QuestionList list={textList} currentQuestion={currentQuestion} currentClass={currentClass} />
 
       <div>
         <input autoFocus type="text" value={inputText} onChange={onChangeHandler} onKeyUp={keyUpHandler} />
