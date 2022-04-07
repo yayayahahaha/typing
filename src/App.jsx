@@ -3,8 +3,9 @@
 // TODO 重置按鈕
 // TODO 套用設定按鈕: 時間多長、或是要打幾個字
 // TODO 定義所謂的 '一個字'
+// TODO 拆分 component ?
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import chanceInit from 'chance'
 import { v4 } from 'uuid'
@@ -21,46 +22,68 @@ function App() {
   const [textList, setTextList] = useState(animalList)
 
   const keyUpHandler = function (event) {
-    console.log('keyUpHandler')
     const code = event.code
     const checkInput = inputText.trim()
-    const currentQuestion = textList[currentIndex].text
+    const currentQuestion = textList[currentIndex]
     const reg = new RegExp(`^${checkInput}`) // NEXT TODO 這裡的判斷要詳細些?
 
     if (code !== 'Space') {
-      // TODO typing 的時候中間打錯也要提示, 打對也要綠色
-      // if reg.test(currentQuestion)
-      textList[currentIndex].className = 'typing good'
-      return
+      let typingClass = 'typing'
+
+      if (!checkInput) {
+        typingClass = 'typing'
+      } else if (reg.test(currentQuestion.text)) {
+        typingClass = 'typing good'
+      } else if (!reg.test(currentQuestion.text)) {
+        typingClass = 'typing bad'
+      } else if (checkInput.length > currentQuestion.text.length) {
+        typingClass = 'typing bad'
+      }
+      return setTextInfo(currentQuestion, { className: typingClass })
     }
 
-    const pass = checkInput === currentQuestion
-    textList[currentIndex].className = pass ? 'pass' : 'wrong'
+    const pass = checkInput === currentQuestion.text
+    setTextInfo(currentQuestion, { className: pass ? 'pass' : 'wrong' })
+
     const nextIndex = currentIndex + 1
-    setCurrentIndex(nextIndex) // 這個好像會有什麼問題我忘了
-    textList[nextIndex].className = 'typing'
+    setCurrentIndex(nextIndex)
+    const nextQuestion = textList[nextIndex]
+
+    // TODO 這邊要不要改寫成類似 className 是 computed 的做法、
+    // 然後在 for 迴圈那邊使用 if index === currentIndex 的方式做自動綁定?
+
+    setTextInfo(nextQuestion, { className: 'typing' })
 
     setInputText('')
   }
   const onChangeHandler = function (event) {
-    console.log('onChangeHandler')
     const value = event.target.value
     setInputText(value)
+  }
+
+  useEffect(() => {
+    const firstText = textList[currentIndex]
+    setTextInfo(firstText, { className: 'typing' })
+  }, [])
+
+  function setTextInfo(target, attribute) {
+    const list = textList.map(item => {
+      if (item.id !== target.id) return item
+      return Object.assign(item, attribute)
+    })
+    setTextList(list)
   }
 
   return (
     <div className="App">
       {textList.map(item => (
-        <>
-          <span className={item.className} key={`${item.id}-word`}>
-            {item.text}
-          </span>
-          <span key={`${item.id}-space`}> </span>
-        </>
+        <span className={item.className} key={`${item.id}-word`}>
+          {item.text}
+        </span>
       ))}
 
       <div>
-        <input type="text" value={inputText} onChange={onChangeHandler} onKeyUp={keyUpHandler} />
+        <input autoFocus type="text" value={inputText} onChange={onChangeHandler} onKeyUp={keyUpHandler} />
       </div>
     </div>
   )
@@ -71,12 +94,11 @@ function createAnimalList(length = 400) {
     .map(() => {
       return {
         id: v4(),
-        text: chance.animal(),
+        text: chance.animal().replace(/^./, t => t.toLowerCase()),
         className: 'normal'
       }
     })
-    .filter(animalInfo => !/\s/.test(animalInfo.text)) // 暫時解掉中間有空白的問題
-  list[0].className = 'typing'
+    .filter(animalInfo => /^\w+$/.test(animalInfo.text)) // 暫時解掉中間有怪怪字元的問題
   return list
 }
 

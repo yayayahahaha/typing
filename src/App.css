@@ -1,3 +1,6 @@
+span {
+  margin: 0px 5px;
+}
 span.normal {
   color: gray;
 }
@@ -13,6 +16,6 @@ span.typing {
 span.typing.good {
   background: #64f15a;
 }
-span.typing.warning {
-  background: #84431f;
+span.typing.bad {
+  background: #e92326;
 }
