@@ -20,7 +20,7 @@ import './App.css'
 
 function App() {
   // 包含了基本上是全部資料的 provider
-  const { inputText, currentQuestion, setCurrentIndex, setInputText, textList, currentIndex, setTextList } = useText()
+  const { inputText, currentQuestion, setCurrentIndex, setInputText, textList, currentIndex, setTextInfo } = useText()
 
   const keyUpHandler = function (event) {
     const code = event.code
@@ -50,12 +50,6 @@ function App() {
     const firstText = textList[currentIndex]
     setTextInfo(firstText, { className: 'typing' })
   }, [])
-
-  function setTextInfo({ id: tId }, attribute) {
-    // 這裡應該有一個不用更新整個陣列的方式?
-    const list = textList.map(item => Object.assign(item, tId === item.id ? attribute : {}))
-    setTextList(list)
-  }
 
   return (
     <div className="App">

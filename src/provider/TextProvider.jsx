@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo } from 'react'
+import React, { createContext, useContext, useState, useMemo, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import chanceInit from 'chance'
@@ -42,6 +42,17 @@ function TextProvider(props) {
     return typingClass
   })
 
+  useEffect(() => {
+    if (currentQuestion.status !== 'wait') return
+    setTextInfo(currentQuestion, { status: 'typing' })
+  }, [currentQuestion])
+
+  function setTextInfo({ id: tId }, attribute) {
+    // 這裡應該有一個不用更新整個陣列的方式? A: 沒有, 大家都說沒有
+    const list = textList.map(item => Object.assign(item, tId === item.id ? attribute : {}))
+    setTextList(list)
+  }
+
   return (
     <TextContext.Provider
       value={{
@@ -55,7 +66,8 @@ function TextProvider(props) {
         setInputText,
 
         textList,
-        setTextList
+        setTextList, // update whole question-list
+        setTextInfo // update single question
       }}
     >
       {children}
@@ -63,7 +75,7 @@ function TextProvider(props) {
   )
 }
 
-function createAnimalList(length = 3) {
+function createAnimalList(length = 5) {
   const list = [...Array(length)]
     .map(() => {
       return {
