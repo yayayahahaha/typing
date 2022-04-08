@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 
 import Question from './Question'
@@ -8,6 +8,11 @@ QuestionList.propTypes = {
   list: PropTypes.array
 }
 
+const PureQues = memo(Question, (prev, next) => {
+  const { currentQuestion: { id } = {} } = next
+  return prev.id !== id
+})
+
 function QuestionList(props) {
   const { list } = props
   const textContext = useText()
@@ -15,7 +20,7 @@ function QuestionList(props) {
   return (
     <>
       {list.map(item => (
-        <Question key={item.id} {...item} {...textContext} />
+        <PureQues key={item.id} {...item} {...textContext} />
       ))}
     </>
   )
