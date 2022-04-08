@@ -17,8 +17,10 @@ function Question(props) {
     return id === currentQuestion.id ? currentClass : itemClass
   }, [id, currentQuestion, inputText])
 
+  // console.log('id:', id)
+
   return (
-    <span className={useClass} key={`${id}-word`}>
+    <span id={`question-${id}`} className={useClass} key={`${id}-word`}>
       {text}
     </span>
   )
