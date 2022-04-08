@@ -63,13 +63,14 @@ function TextProvider(props) {
   )
 }
 
-function createAnimalList(length = 5) {
+function createAnimalList(length = 3) {
   const list = [...Array(length)]
     .map(() => {
       return {
         id: v4(),
         text: chance.animal().replace(/^./, t => t.toLowerCase()),
-        className: 'normal'
+        className: 'normal',
+        status: 'wait'
       }
     })
     .filter(animalInfo => /^\w+$/.test(animalInfo.text)) // 暫時解掉中間有怪怪字元的問題

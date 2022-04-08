@@ -9,8 +9,13 @@ QuestionList.propTypes = {
 }
 
 const PureQues = memo(Question, (prev, next) => {
-  const { currentQuestion: { id } = {} } = next
-  return prev.id !== id
+  const {
+    currentQuestion: { id: cid },
+    status: pst
+  } = next
+  const { id: pid, status: nst } = prev
+
+  return pid !== cid && pst === nst
 })
 
 function QuestionList(props) {
