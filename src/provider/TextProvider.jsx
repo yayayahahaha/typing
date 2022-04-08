@@ -47,10 +47,13 @@ function TextProvider(props) {
       value={{
         currentIndex,
         setCurrentIndex,
+
         currentQuestion,
         currentClass,
+
         inputText,
         setInputText,
+
         textList,
         setTextList
       }}
@@ -60,7 +63,7 @@ function TextProvider(props) {
   )
 }
 
-function createAnimalList(length = 400) {
+function createAnimalList(length = 5) {
   const list = [...Array(length)]
     .map(() => {
       return {

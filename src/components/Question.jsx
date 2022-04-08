@@ -1,19 +1,25 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { useText } from '../provider/TextProvider.jsx'
-
 Question.propTypes = {
-  item: PropTypes.object
+  id: PropTypes.string,
+  text: PropTypes.string,
+  className: PropTypes.string,
+  currentQuestion: PropTypes.object,
+  currentClass: PropTypes.string,
+  inputText: PropTypes.string
 }
 
 function Question(props) {
-  const { item } = props
-  const { currentQuestion, currentClass } = useText()
+  const { id, text, className: itemClass, currentQuestion, currentClass, inputText } = props
+
+  const useClass = useMemo(() => {
+    return id === currentQuestion.id ? currentClass : itemClass
+  }, [id, currentQuestion, inputText])
 
   return (
-    <span className={item.id === currentQuestion.id ? currentClass : item.className} key={`${item.id}-word`}>
-      {item.text}
+    <span className={useClass} key={`${id}-word`}>
+      {text}
     </span>
   )
 }
