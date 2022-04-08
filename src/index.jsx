@@ -4,11 +4,13 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
+import TextProvider from './provider/TextProvider.jsx'
+
 const root = createRoot(document.getElementById('root'))
 root.render(
-  // <React.StrictMode>
-  <App />
-  // </React.StrictMode>
+  <TextProvider>
+    <App />
+  </TextProvider>
 )
 
 // If you want to start measuring performance in your app, pass a function
