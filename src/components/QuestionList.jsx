@@ -4,18 +4,16 @@ import PropTypes from 'prop-types'
 import Question from './Question'
 
 QuestionList.propTypes = {
-  list: PropTypes.array,
-  currentQuestion: PropTypes.object,
-  currentClass: PropTypes.string
+  list: PropTypes.array
 }
 
 function QuestionList(props) {
-  const { list, currentQuestion, currentClass } = props
+  const { list } = props
 
   return (
     <>
       {list.map(item => (
-        <Question key={item.id} item={item} currentQuestion={currentQuestion} currentClass={currentClass} />
+        <Question key={item.id} item={item} />
       ))}
     </>
   )

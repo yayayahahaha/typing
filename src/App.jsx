@@ -8,48 +8,18 @@
 // TODO 樣式
 
 // TODO -program-
-// TODO 用 context provider 等把 資料傳下去、然後在 Question 那層 component 實作 currentQuestion 相關的樣式
+// TODO 更新陣列裡單一項目的時候應該有比整個陣列刷掉更好的做法
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect } from 'react'
 
-import chanceInit from 'chance'
-import { v4 } from 'uuid'
 import QuestionList from './components/QuestionList.jsx'
+import { useText } from './provider/TextProvider.jsx'
 
 import './App.css'
 
-const chance = chanceInit()
-
 function App() {
-  const animalList = createAnimalList()
-
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [inputText, setInputText] = useState('')
-  const [textList, setTextList] = useState(animalList)
-
-  // 當前的題目
-  const currentQuestion = useMemo(() => textList[currentIndex])
-  // 當前題目的樣式: typing, good, bad
-  // TODO 這個應該可以放到最子層的 component
-  const currentClass = useMemo(() => {
-    const checkInput = inputText.trim()
-    const reg = new RegExp(`^${checkInput}`)
-
-    let typingClass = 'typing '
-    switch (true) {
-      case !checkInput:
-        break
-      case reg.test(currentQuestion.text):
-        typingClass += 'good'
-        break
-      case !reg.test(currentQuestion.text):
-      case checkInput.length > currentQuestion.text.length:
-        typingClass += 'bad'
-        break
-    }
-
-    return typingClass
-  })
+  // 包含了基本上是全部資料的 provider
+  const { inputText, currentQuestion, setCurrentIndex, setInputText, textList, currentIndex, setTextList } = useText()
 
   const keyUpHandler = function (event) {
     const code = event.code
@@ -74,6 +44,7 @@ function App() {
   }
 
   useEffect(() => {
+    // 模擬 mounted
     // 幫第一筆綁上 typing 的樣式
     const firstText = textList[currentIndex]
     setTextInfo(firstText, { className: 'typing' })
@@ -87,26 +58,13 @@ function App() {
 
   return (
     <div className="App">
-      <QuestionList list={textList} currentQuestion={currentQuestion} currentClass={currentClass} />
+      <QuestionList list={textList} />
 
       <div>
         <input autoFocus type="text" value={inputText} onChange={onChangeHandler} onKeyUp={keyUpHandler} />
       </div>
     </div>
   )
-}
-
-function createAnimalList(length = 400) {
-  const list = [...Array(length)]
-    .map(() => {
-      return {
-        id: v4(),
-        text: chance.animal().replace(/^./, t => t.toLowerCase()),
-        className: 'normal'
-      }
-    })
-    .filter(animalInfo => /^\w+$/.test(animalInfo.text)) // 暫時解掉中間有怪怪字元的問題
-  return list
 }
 
 export default App
