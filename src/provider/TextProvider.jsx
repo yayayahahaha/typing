@@ -47,10 +47,13 @@ function TextProvider(props) {
       value={{
         currentIndex,
         setCurrentIndex,
+
         currentQuestion,
         currentClass,
+
         inputText,
         setInputText,
+
         textList,
         setTextList
       }}
