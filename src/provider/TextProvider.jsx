@@ -53,6 +53,21 @@ function TextProvider(props) {
     setTextList(list)
   }
 
+  function reset() {
+    // 回到起始座標
+    setCurrentIndex(0)
+
+    // 重新產一個陣列
+    setTextList(createAnimalList())
+
+    // 清空輸入字串
+    setInputText('')
+
+    // 讓關注點回到 input 框
+    inputDom.focus()
+  }
+  const [inputDom, setInputDom] = useState(null)
+
   return (
     <TextContext.Provider
       value={{
@@ -67,7 +82,11 @@ function TextProvider(props) {
 
         textList,
         setTextList, // update whole question-list
-        setTextInfo // update single question
+        setTextInfo, // update single question
+
+        reset,
+
+        setInputDom
       }}
     >
       {children}

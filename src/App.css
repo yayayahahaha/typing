@@ -1,3 +1,5 @@
+/* TODO 用 scss 或 windicss */
+/* span 的外面要包一層 class, 用 scss 會比較好寫  */
 span {
   margin: 0px 5px;
 }
@@ -18,4 +20,8 @@ span.typing.good {
 }
 span.typing.bad {
   background: #e92326;
+}
+
+.reset-button {
+  margin-left: 3px;
 }
