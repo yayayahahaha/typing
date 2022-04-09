@@ -17,7 +17,7 @@ function Question(props) {
     return id === currentQuestion.id ? currentClass : itemClass
   }, [id, currentQuestion, inputText])
 
-  // console.log('id:', id)
+  // console.log('id:', id) // 用於檢測否被重複渲染
 
   return (
     <span id={`question-${id}`} className={useClass} key={`${id}-word`}>
