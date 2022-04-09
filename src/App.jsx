@@ -19,7 +19,17 @@ import './App.css'
 
 function App() {
   // 包含了基本上是全部資料的 provider
-  const { inputText, currentQuestion, setCurrentIndex, setInputText, textList, currentIndex, setTextInfo } = useText()
+  const {
+    inputText,
+    currentQuestion,
+    setCurrentIndex,
+    setInputText,
+    textList,
+    currentIndex,
+    setTextInfo,
+    setInputDom,
+    reset
+  } = useText()
 
   const keyUpHandler = function (event) {
     const code = event.code
@@ -55,7 +65,17 @@ function App() {
       <QuestionList list={textList} />
 
       <div>
-        <input autoFocus type="text" value={inputText} onChange={onChangeHandler} onKeyUp={keyUpHandler} />
+        <input
+          ref={input => setInputDom(input)}
+          autoFocus
+          type="text"
+          value={inputText}
+          onChange={onChangeHandler}
+          onKeyUp={keyUpHandler}
+        />
+        <button className="reset-button" onClick={reset}>
+          Reset
+        </button>
       </div>
     </div>
   )
