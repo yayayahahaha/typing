@@ -10,7 +10,7 @@
 
 // TODO -program-
 
-import React, { useEffect } from 'react'
+import React, { memo, useEffect } from 'react'
 
 import ModeSwitcher from './ModeSwitcher.jsx'
 
@@ -18,6 +18,8 @@ import QuestionList from './components/QuestionList.jsx'
 import { useText } from './provider/TextProvider.jsx'
 
 import './App.css'
+
+const PureModeSwitcher = memo(ModeSwitcher)
 
 function App() {
   // 包含了基本上是全部資料的 provider
@@ -30,7 +32,11 @@ function App() {
     currentIndex,
     setTextInfo,
     setInputDom,
-    reset
+    reset,
+
+    // 給 ModeSwitcher 用的
+    sec,
+    targetWords
   } = useText()
 
   const keyUpHandler = function (event) {
@@ -64,7 +70,7 @@ function App() {
 
   return (
     <div className="App">
-      <ModeSwitcher />
+      <PureModeSwitcher sec={sec} targetWords={targetWords} />
 
       <QuestionList list={textList} />
 

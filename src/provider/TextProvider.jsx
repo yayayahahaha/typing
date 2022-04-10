@@ -18,6 +18,10 @@ function TextProvider(props) {
   const [inputText, setInputText] = useState('')
   const [textList, setTextList] = useState(animalList)
 
+  const [sec, setSec] = useState(0) // 秒數，可能是正數也可能是倒數
+  const [direction, setDirection] = useState(-1) // 倒數
+  const [targetWords, setTargetWords] = useState(10) // 目標字數
+
   const [currentIndex, setCurrentIndex] = useState(0)
   // 當前的題目
   const currentQuestion = useMemo(() => textList[currentIndex])
@@ -112,8 +116,8 @@ function TextProvider(props) {
         setDirection,
 
         // 如果是 countup mode 的目標字數
-        targetNumber,
-        setTargetNumber
+        targetWords,
+        setTargetWords
       }}
     >
       {children}
