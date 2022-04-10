@@ -23,8 +23,8 @@ import { useText } from './provider/TextProvider.jsx'
 import './App.css'
 
 const PureModeSwitcher = memo(ModeSwitcher)
+const PureSetting = memo(Setting)
 const PureDescription = memo(Description)
-const PureSetting = memo(Setting, f => f)
 const PureBackToDefault = memo(BackToDefault, f => f /* 就只會渲染一次那種 */)
 
 function App() {
