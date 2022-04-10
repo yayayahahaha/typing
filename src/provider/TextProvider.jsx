@@ -9,6 +9,8 @@ TextProvider.propTypes = {
   children: PropTypes.any
 }
 
+const animalList = createAnimalList()
+
 const TextContext = createContext()
 function TextProvider(props) {
   const { children } = props
@@ -18,8 +20,6 @@ function TextProvider(props) {
     targetWords: 60,
     gameStatus: 'ready'
   }
-
-  const animalList = createAnimalList()
 
   const [inputText, setInputText] = useState('')
   const [textList, setTextList] = useState(animalList)
@@ -173,16 +173,25 @@ function TextProvider(props) {
 }
 
 function createAnimalList(length = 5) {
-  const list = [...Array(length)]
-    .map(() => {
-      return {
-        id: v4(),
-        text: chance.animal().replace(/^./, t => t.toLowerCase()),
-        className: 'normal',
-        status: 'wait'
-      }
-    })
-    .filter(animalInfo => /^\w+$/.test(animalInfo.text)) // 暫時解掉中間有怪怪字元的問題
+  const list = []
+  _createList(length, list)
+
+  function _createList(length, list) {
+    ;[...Array(length - list.length)]
+      .map(() => {
+        return {
+          id: v4(),
+          text: chance.animal().replace(/^./, t => t.toLowerCase()),
+          className: 'normal',
+          status: 'wait'
+        }
+      })
+      .filter(animalInfo => /^\w+$/.test(animalInfo.text)) // 暫時解掉中間有怪怪字元的問題
+      .forEach(item => list.push(item))
+
+    if (list.length < length) _createList(length, list)
+  }
+
   return list
 }
 
