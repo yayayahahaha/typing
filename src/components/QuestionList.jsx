@@ -32,11 +32,11 @@ function QuestionList(props) {
   const textContext = useText()
 
   return (
-    <>
+    <div>
       {list.map(item => (
         <PureQues key={item.id} {...item} {...textContext} />
       ))}
-    </>
+    </div>
   )
 }
 

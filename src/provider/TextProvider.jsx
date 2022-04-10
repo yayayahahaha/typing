@@ -18,9 +18,12 @@ function TextProvider(props) {
   const [inputText, setInputText] = useState('')
   const [textList, setTextList] = useState(animalList)
 
-  const [sec, setSec] = useState(0) // 秒數，可能是正數也可能是倒數
+  const [sec, setSec] = useState(60) // 秒數，可能是正數也可能是倒數
   const [direction, setDirection] = useState(-1) // 倒數
   const [targetWords, setTargetWords] = useState(10) // 目標字數
+
+  // 模式
+  const [mode, setMode] = useState('countdown')
 
   const [currentIndex, setCurrentIndex] = useState(0)
   // 當前的題目
@@ -106,6 +109,10 @@ function TextProvider(props) {
 
         // 取得當前 input 框的 DOM
         setInputDom,
+
+        // 模式
+        mode,
+        setMode,
 
         // 秒數，可能是正數也可能是倒數
         sec,

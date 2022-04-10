@@ -13,6 +13,8 @@
 import React, { memo, useEffect } from 'react'
 
 import ModeSwitcher from './ModeSwitcher.jsx'
+import Description from './Description.jsx'
+import Setting from './Setting.jsx'
 
 import QuestionList from './components/QuestionList.jsx'
 import { useText } from './provider/TextProvider.jsx'
@@ -20,6 +22,7 @@ import { useText } from './provider/TextProvider.jsx'
 import './App.css'
 
 const PureModeSwitcher = memo(ModeSwitcher)
+const PureDescription = memo(Description)
 
 function App() {
   // 包含了基本上是全部資料的 provider
@@ -36,7 +39,13 @@ function App() {
 
     // 給 ModeSwitcher 用的
     sec,
-    targetWords
+    targetWords,
+    mode,
+    setMode,
+
+    // 給 Setting 用的
+    setSec,
+    setTargetWords
   } = useText()
 
   const keyUpHandler = function (event) {
@@ -70,9 +79,14 @@ function App() {
 
   return (
     <div className="App">
-      <PureModeSwitcher sec={sec} targetWords={targetWords} />
+      <PureModeSwitcher mode={mode} setMode={setMode} />
+
+      <Setting mode={mode} sec={sec} targetWords={targetWords} setSec={setSec} setTargetWords={setTargetWords} />
+      <PureDescription mode={mode} sec={sec} targetWords={targetWords} />
 
       <QuestionList list={textList} />
+
+      <hr />
 
       <div>
         <input

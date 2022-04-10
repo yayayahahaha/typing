@@ -1,27 +1,13 @@
-import React, { useState, useEffect } from 'react'
-
-import useDescription from './hooks/description.js'
+import React from 'react'
 
 import PropTypes from 'prop-types'
 ModeSwitcher.propTypes = {
-  sec: PropTypes.number,
-  targetWords: PropTypes.any
+  mode: PropTypes.string,
+  setMode: Function.prototype
 }
 
 function ModeSwitcher(props) {
-  const { sec, targetWords } = props
-  const [mode, setMode] = useState('countdown')
-
-  const rowCountdownDescription = '$ 秒內可以完成多少個字'
-  const rowCountupDescription = '完成 $ 個字需要多少時間'
-
-  const [countdownDescription, setCountdownDescription] = useDescription(sec, rowCountdownDescription)
-  const [countupDescription, setCountupDescription] = useDescription(targetWords, rowCountupDescription)
-
-  useEffect(() => {
-    setCountdownDescription(sec)
-    setCountupDescription(targetWords)
-  }, [sec, targetWords])
+  const { mode, setMode } = props
 
   function handleModeChande(event) {
     const {
@@ -55,7 +41,6 @@ function ModeSwitcher(props) {
           <span>比時間</span>
         </label>
       </div>
-      {mode === 'countdown' ? <p>{countdownDescription}</p> : <p>{countupDescription}</p>}
     </div>
   )
 }
