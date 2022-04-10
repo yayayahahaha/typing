@@ -10,12 +10,22 @@
 
 // TODO -program-
 
-import React, { useEffect } from 'react'
+import React, { memo, useEffect } from 'react'
+
+import ModeSwitcher from './ModeSwitcher.jsx'
+import Description from './Description.jsx'
+import Setting from './Setting.jsx'
+import BackToDefault from './BackToDefault.jsx'
 
 import QuestionList from './components/QuestionList.jsx'
 import { useText } from './provider/TextProvider.jsx'
 
 import './App.css'
+
+const PureModeSwitcher = memo(ModeSwitcher)
+const PureSetting = memo(Setting)
+const PureDescription = memo(Description)
+const PureBackToDefault = memo(BackToDefault, f => f /* 就只會渲染一次那種 */)
 
 function App() {
   // 包含了基本上是全部資料的 provider
@@ -28,7 +38,19 @@ function App() {
     currentIndex,
     setTextInfo,
     setInputDom,
-    reset
+    reset,
+
+    // 給 ModeSwitcher 用的
+    sec,
+    targetWords,
+    mode,
+    setMode,
+
+    // 給 Setting 用的
+    setSec,
+    setTargetWords,
+
+    defaultValue
   } = useText()
 
   const keyUpHandler = function (event) {
@@ -62,8 +84,15 @@ function App() {
 
   return (
     <div className="App">
-      <QuestionList list={textList} />
+      <PureModeSwitcher mode={mode} setMode={setMode} />
 
+      <PureSetting mode={mode} sec={sec} targetWords={targetWords} setSec={setSec} setTargetWords={setTargetWords} />
+      <PureDescription mode={mode} sec={sec} targetWords={targetWords} />
+      <PureBackToDefault defaultValue={defaultValue} setSec={setSec} setTargetWords={setTargetWords} />
+
+      <hr />
+
+      <QuestionList list={textList} />
       <div>
         <input
           ref={input => setInputDom(input)}

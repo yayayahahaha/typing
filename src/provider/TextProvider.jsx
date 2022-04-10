@@ -13,16 +13,46 @@ const TextContext = createContext()
 function TextProvider(props) {
   const { children } = props
 
+  const defaultValue = {
+    sec: 60,
+    targetWords: 60
+  }
+
   const animalList = createAnimalList()
 
   const [inputText, setInputText] = useState('')
   const [textList, setTextList] = useState(animalList)
+
+  const [sec, setSec] = useState(defaultValue.sec) // 秒數，可能是正數也可能是倒數
+  const [direction, setDirection] = useState(-1) // 倒數
+  const [targetWords, setTargetWords] = useState(defaultValue.targetWords) // 目標字數
+
+  // 模式
+  const [mode, setMode] = useState('countdown')
+
+  const [gameStatus, setGameStatus] = useState('ready')
+  // setting hash
+  const settingHash = useMemo(() => {
+    return `${mode}-${sec}-${targetWords}`
+  }, [mode, sec, targetWords])
+
+  const [afterMounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
+  useEffect(() => {
+    if (!afterMounted) return
+
+    reset({ focus: false })
+    setGameStatus('ready')
+  }, [settingHash])
 
   const [currentIndex, setCurrentIndex] = useState(0)
   // 當前的題目
   const currentQuestion = useMemo(() => textList[currentIndex])
   // 當前題目的樣式: typing, good, bad
   const currentClass = useMemo(() => {
+    if (currentQuestion === undefined) return // 代表打完了
+
     const checkInput = inputText.trim()
     const reg = new RegExp(`^${checkInput}`)
 
@@ -43,6 +73,13 @@ function TextProvider(props) {
   })
 
   useEffect(() => {
+    if (currentIndex < textList.length) return
+    console.log('超過啦')
+  }, [currentIndex])
+
+  useEffect(() => {
+    if (currentQuestion === undefined) return
+
     if (currentQuestion.status !== 'wait') return
     setTextInfo(currentQuestion, { status: 'typing' })
   }, [currentQuestion])
@@ -53,40 +90,71 @@ function TextProvider(props) {
     setTextList(list)
   }
 
-  function reset() {
+  function reset(config = {}) {
+    const { focus = true } = config
+
     // 回到起始座標
     setCurrentIndex(0)
 
     // 重新產一個陣列
-    setTextList(createAnimalList())
+    setTextList(createAnimalList() /* TODO 這裡要根據使用者的設定產出正確的陣列 */)
 
     // 清空輸入字串
     setInputText('')
 
     // 讓關注點回到 input 框
-    inputDom.focus()
+    if (focus) inputDom.focus()
   }
   const [inputDom, setInputDom] = useState(null)
 
   return (
     <TextContext.Provider
       value={{
+        // 當前題目的座標
         currentIndex,
         setCurrentIndex,
 
+        // 當前坐標指到的題目實體
         currentQuestion,
         currentClass,
 
+        // 當前輸入的文字
         inputText,
         setInputText,
 
+        // 當前的題目列表
         textList,
         setTextList, // update whole question-list
         setTextInfo, // update single question
 
+        // 重置所有
         reset,
 
-        setInputDom
+        // 取得當前 input 框的 DOM
+        setInputDom,
+
+        // 模式
+        mode,
+        setMode,
+
+        // 秒數，可能是正數也可能是倒數
+        sec,
+        setSec,
+
+        // 正數 or 倒數的方向
+        direction,
+        setDirection,
+
+        // 如果是 countup mode 的目標字數
+        targetWords,
+        setTargetWords,
+
+        // 預設值
+        defaultValue,
+
+        // 遊戲狀態相關
+        gameStatus,
+        setGameStatus
       }}
     >
       {children}
