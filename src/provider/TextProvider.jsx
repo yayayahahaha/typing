@@ -30,12 +30,14 @@ function TextProvider(props) {
   // 模式
   const [mode, setMode] = useState('countdown')
 
+  const [gameStatus, setGameStatus] = useState('ready')
   // setting hash
   const settingHash = useMemo(() => {
     return `${mode}-${sec}-${targetWords}`
   }, [mode, sec, targetWords])
   useEffect(() => {
-    console.log('settingHash changed!', settingHash)
+    reset()
+    setGameStatus('ready')
   }, [settingHash])
 
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -87,7 +89,7 @@ function TextProvider(props) {
     setCurrentIndex(0)
 
     // 重新產一個陣列
-    setTextList(createAnimalList())
+    setTextList(createAnimalList() /* TODO 這裡要根據使用者的設定產出正確的陣列 */)
 
     // 清空輸入字串
     setInputText('')
@@ -140,7 +142,11 @@ function TextProvider(props) {
         setTargetWords,
 
         // 預設值
-        defaultValue
+        defaultValue,
+
+        // 遊戲狀態相關
+        gameStatus,
+        setGameStatus
       }}
     >
       {children}
