@@ -40,20 +40,26 @@ function App() {
     setInputDom,
     reset,
 
+    gameStatus,
+    setGameStatus,
+
     // 給 ModeSwitcher 用的
     sec,
     targetWords,
     mode,
     setMode,
-
     // 給 Setting 用的
     setSec,
     setTargetWords,
-
-    defaultValue
+    // 給 back-to-default 用的
+    defaultValue,
+    // 用於遮罩
+    settingClass
   } = useText()
 
-  const keyUpHandler = function (event) {
+  const keyPressHandler = function (event) {
+    setGameStatus('gaming')
+
     const code = event.code
     if (code !== 'Space') return
 
@@ -84,11 +90,14 @@ function App() {
 
   return (
     <div className="App">
-      <PureModeSwitcher mode={mode} setMode={setMode} />
+      <span>{gameStatus}</span>
 
-      <PureSetting mode={mode} sec={sec} targetWords={targetWords} setSec={setSec} setTargetWords={setTargetWords} />
-      <PureDescription mode={mode} sec={sec} targetWords={targetWords} />
-      <PureBackToDefault defaultValue={defaultValue} setSec={setSec} setTargetWords={setTargetWords} />
+      <div className={settingClass}>
+        <PureModeSwitcher mode={mode} setMode={setMode} />
+        <PureSetting mode={mode} sec={sec} targetWords={targetWords} setSec={setSec} setTargetWords={setTargetWords} />
+        <PureDescription mode={mode} sec={sec} targetWords={targetWords} />
+        <PureBackToDefault defaultValue={defaultValue} setSec={setSec} setTargetWords={setTargetWords} />
+      </div>
 
       <hr />
 
@@ -100,7 +109,7 @@ function App() {
           type="text"
           value={inputText}
           onChange={onChangeHandler}
-          onKeyUp={keyUpHandler}
+          onKeyPress={keyPressHandler}
         />
         <button className="reset-button" onClick={reset}>
           Reset

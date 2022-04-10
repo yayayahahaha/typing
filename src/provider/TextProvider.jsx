@@ -15,7 +15,8 @@ function TextProvider(props) {
 
   const defaultValue = {
     sec: 60,
-    targetWords: 60
+    targetWords: 60,
+    gameStatus: 'ready'
   }
 
   const animalList = createAnimalList()
@@ -29,8 +30,12 @@ function TextProvider(props) {
 
   // 模式
   const [mode, setMode] = useState('countdown')
-
+  // 遊戲狀態
   const [gameStatus, setGameStatus] = useState('ready')
+
+  // setting 的樣式
+  const settingClass = useMemo(() => `setting-${gameStatus}`, [gameStatus])
+
   // setting hash
   const settingHash = useMemo(() => {
     return `${mode}-${sec}-${targetWords}`
@@ -92,6 +97,8 @@ function TextProvider(props) {
 
   function reset(config = {}) {
     const { focus = true } = config
+    // 重置遊戲狀態
+    setGameStatus(defaultValue.gameStatus)
 
     // 回到起始座標
     setCurrentIndex(0)
@@ -154,7 +161,10 @@ function TextProvider(props) {
 
         // 遊戲狀態相關
         gameStatus,
-        setGameStatus
+        setGameStatus,
+
+        // 遮罩
+        settingClass
       }}
     >
       {children}
