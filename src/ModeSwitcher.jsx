@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 ModeSwitcher.propTypes = {
   mode: PropTypes.string,
-  setMode: Function.prototype
+  setMode: PropTypes.func
 }
 
 function ModeSwitcher(props) {

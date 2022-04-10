@@ -13,14 +13,19 @@ const TextContext = createContext()
 function TextProvider(props) {
   const { children } = props
 
+  const defaultValue = {
+    sec: 60,
+    targetWords: 60
+  }
+
   const animalList = createAnimalList()
 
   const [inputText, setInputText] = useState('')
   const [textList, setTextList] = useState(animalList)
 
-  const [sec, setSec] = useState(60) // 秒數，可能是正數也可能是倒數
+  const [sec, setSec] = useState(defaultValue.sec) // 秒數，可能是正數也可能是倒數
   const [direction, setDirection] = useState(-1) // 倒數
-  const [targetWords, setTargetWords] = useState(10) // 目標字數
+  const [targetWords, setTargetWords] = useState(defaultValue.targetWords) // 目標字數
 
   // 模式
   const [mode, setMode] = useState('countdown')
@@ -124,7 +129,10 @@ function TextProvider(props) {
 
         // 如果是 countup mode 的目標字數
         targetWords,
-        setTargetWords
+        setTargetWords,
+
+        // 預設值
+        defaultValue
       }}
     >
       {children}

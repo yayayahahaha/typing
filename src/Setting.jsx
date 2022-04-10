@@ -9,8 +9,8 @@ Setting.propTypes = {
   mode: PropTypes.string,
   sec: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   targetWords: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  setSec: Function.prototype,
-  setTargetWords: Function.prototype
+  setSec: PropTypes.func,
+  setTargetWords: PropTypes.func
 }
 
 function Setting(props) {
