@@ -16,6 +16,7 @@ import ModeSwitcher from './ModeSwitcher.jsx'
 import Description from './Description.jsx'
 import Setting from './Setting.jsx'
 import BackToDefault from './BackToDefault.jsx'
+import StatusBlock from './StatusBlock.jsx'
 
 import QuestionList from './components/QuestionList.jsx'
 import { useText } from './provider/TextProvider.jsx'
@@ -54,7 +55,10 @@ function App() {
     // 給 back-to-default 用的
     defaultValue,
     // 用於遮罩
-    settingClass
+    settingClass,
+
+    // 正確陣列
+    passList
   } = useText()
 
   const keyPressHandler = function (event) {
@@ -103,19 +107,23 @@ function App() {
 
       <hr />
 
-      <QuestionList list={textList} />
-      <div>
-        <input
-          ref={input => setInputDom(input)}
-          autoFocus
-          type="text"
-          value={inputText}
-          onChange={onChangeHandler}
-          onKeyPress={keyPressHandler}
-        />
-        <button className="reset-button" onClick={reset}>
-          Reset
-        </button>
+      <StatusBlock mode={mode} sec={sec} passList={passList} />
+
+      <div className="inputBlock">
+        <QuestionList list={textList} />
+        <div>
+          <input
+            ref={input => setInputDom(input)}
+            autoFocus
+            type="text"
+            value={inputText}
+            onChange={onChangeHandler}
+            onKeyPress={keyPressHandler}
+          />
+          <button className="reset-button" onClick={reset}>
+            Reset
+          </button>
+        </div>
       </div>
     </div>
   )

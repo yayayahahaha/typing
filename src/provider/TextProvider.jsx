@@ -23,6 +23,10 @@ function TextProvider(props) {
 
   const [inputText, setInputText] = useState('')
   const [textList, setTextList] = useState(animalList)
+  const passList = useMemo(() => {
+    // 好像沒有什麼 deep 不 deep 的問題
+    return textList.filter(item => item.className === 'pass')
+  }, [textList])
 
   const [sec, setSec] = useState(defaultValue.sec) // 秒數，可能是正數也可能是倒數
   const [direction, setDirection] = useState(-1) // 倒數
@@ -164,7 +168,10 @@ function TextProvider(props) {
         setGameStatus,
 
         // 遮罩
-        settingClass
+        settingClass,
+
+        // 正確陣列
+        passList
       }}
     >
       {children}
