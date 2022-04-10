@@ -79,7 +79,7 @@ function TextProvider(props) {
 
   useEffect(() => {
     if (currentIndex < textList.length) return
-    console.log('超過啦')
+    setGameStatus('end')
   }, [currentIndex])
 
   useEffect(() => {

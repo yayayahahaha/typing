@@ -58,10 +58,14 @@ function App() {
   } = useText()
 
   const keyPressHandler = function (event) {
-    setGameStatus('gaming')
+    if (gameStatus !== 'end') setGameStatus('gaming')
 
     const code = event.code
     if (code !== 'Space') return
+
+    // 清空輸入框
+    setInputText('')
+    if (gameStatus === 'end') return
 
     // 使用者按了空白，也就是送出
     const checkInput = inputText.trim()
@@ -72,13 +76,11 @@ function App() {
 
     // 移動題目
     setCurrentIndex(i => i + 1)
-
-    // 清空輸入框
-    setInputText('')
   }
   const onChangeHandler = function (event) {
     const value = event.target.value
-    setInputText(value)
+
+    setInputText(value.trim())
   }
 
   useEffect(() => {
