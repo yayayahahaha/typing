@@ -1,5 +1,6 @@
 /* TODO 用 scss 或 windicss */
 /* span 的外面要包一層 class, 用 scss 會比較好寫  */
+/* setting- 的外面要包一層 class, 用 scss 會比較好寫  */
 span {
   margin: 0px 5px;
 }
@@ -24,4 +25,11 @@ span.typing.bad {
 
 .reset-button {
   margin-left: 3px;
+}
+
+.setting-ready {
+}
+.setting-gaming {
+  opacity: 0.5;
+  pointer-events: none;
 }
