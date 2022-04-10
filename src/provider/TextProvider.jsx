@@ -35,8 +35,14 @@ function TextProvider(props) {
   const settingHash = useMemo(() => {
     return `${mode}-${sec}-${targetWords}`
   }, [mode, sec, targetWords])
+
+  const [afterMounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
   useEffect(() => {
-    reset()
+    if (!afterMounted) return
+
+    reset({ focus: false })
     setGameStatus('ready')
   }, [settingHash])
 
@@ -84,7 +90,9 @@ function TextProvider(props) {
     setTextList(list)
   }
 
-  function reset() {
+  function reset(config = {}) {
+    const { focus = true } = config
+
     // 回到起始座標
     setCurrentIndex(0)
 
@@ -95,7 +103,7 @@ function TextProvider(props) {
     setInputText('')
 
     // 讓關注點回到 input 框
-    inputDom.focus()
+    if (focus) inputDom.focus()
   }
   const [inputDom, setInputDom] = useState(null)
 
