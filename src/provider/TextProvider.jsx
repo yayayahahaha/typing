@@ -30,6 +30,14 @@ function TextProvider(props) {
   // 模式
   const [mode, setMode] = useState('countdown')
 
+  // setting hash
+  const settingHash = useMemo(() => {
+    return `${mode}-${sec}-${targetWords}`
+  }, [mode, sec, targetWords])
+  useEffect(() => {
+    console.log('settingHash changed!', settingHash)
+  }, [settingHash])
+
   const [currentIndex, setCurrentIndex] = useState(0)
   // 當前的題目
   const currentQuestion = useMemo(() => textList[currentIndex])
