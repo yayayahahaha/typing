@@ -80,22 +80,40 @@ function TextProvider(props) {
   return (
     <TextContext.Provider
       value={{
+        // 當前題目的座標
         currentIndex,
         setCurrentIndex,
 
+        // 當前坐標指到的題目實體
         currentQuestion,
         currentClass,
 
+        // 當前輸入的文字
         inputText,
         setInputText,
 
+        // 當前的題目列表
         textList,
         setTextList, // update whole question-list
         setTextInfo, // update single question
 
+        // 重置所有
         reset,
 
-        setInputDom
+        // 取得當前 input 框的 DOM
+        setInputDom,
+
+        // 秒數，可能是正數也可能是倒數
+        sec,
+        setSec,
+
+        // 正數 or 倒數的方向
+        direction,
+        setDirection,
+
+        // 如果是 countup mode 的目標字數
+        targetNumber,
+        setTargetNumber
       }}
     >
       {children}

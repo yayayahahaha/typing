@@ -12,6 +12,8 @@
 
 import React, { useEffect } from 'react'
 
+import ModeSwitcher from './ModeSwitcher.jsx'
+
 import QuestionList from './components/QuestionList.jsx'
 import { useText } from './provider/TextProvider.jsx'
 
@@ -62,6 +64,8 @@ function App() {
 
   return (
     <div className="App">
+      <ModeSwitcher />
+
       <QuestionList list={textList} />
 
       <div>
