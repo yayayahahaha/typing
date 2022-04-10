@@ -11,11 +11,18 @@ Question.propTypes = {
 }
 
 function Question(props) {
-  const { id, text, className: itemClass, currentQuestion, currentClass, inputText } = props
+  const {
+    id,
+    text,
+    className: itemClass,
+    currentQuestion: { id: cid = 'default-id' } = {},
+    currentClass,
+    inputText
+  } = props
 
   const useClass = useMemo(() => {
-    return id === currentQuestion.id ? currentClass : itemClass
-  }, [id, currentQuestion, inputText])
+    return id === cid ? currentClass : itemClass
+  }, [id, cid, inputText])
 
   // console.log('id:', id) // 用於檢測否被重複渲染
 

@@ -23,6 +23,8 @@ function TextProvider(props) {
   const currentQuestion = useMemo(() => textList[currentIndex])
   // 當前題目的樣式: typing, good, bad
   const currentClass = useMemo(() => {
+    if (currentQuestion === undefined) return // 代表打完了
+
     const checkInput = inputText.trim()
     const reg = new RegExp(`^${checkInput}`)
 
@@ -43,6 +45,13 @@ function TextProvider(props) {
   })
 
   useEffect(() => {
+    if (currentIndex < textList.length) return
+    console.log('超過啦')
+  }, [currentIndex])
+
+  useEffect(() => {
+    if (currentQuestion === undefined) return
+
     if (currentQuestion.status !== 'wait') return
     setTextInfo(currentQuestion, { status: 'typing' })
   }, [currentQuestion])

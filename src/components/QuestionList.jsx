@@ -11,7 +11,9 @@ QuestionList.propTypes = {
 const PureQues = memo(Question, (prev, next) => {
   // true 的話不會改變， false 的話會吃到異動
   const {
-    currentQuestion: { id: cid },
+    currentQuestion: { id: cid = 'default-id' } = {
+      /* 用到這個預設值的時候代表結束了 */
+    },
     currentClass: pcc,
     status: pst
   } = next
