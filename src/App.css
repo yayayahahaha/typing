@@ -33,3 +33,7 @@ span.typing.bad {
   opacity: 0.5;
   pointer-events: none;
 }
+
+.hide {
+  display: none;
+}

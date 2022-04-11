@@ -5,7 +5,8 @@ import Question from './Question'
 import { useText } from '../provider/TextProvider.jsx'
 
 QuestionList.propTypes = {
-  list: PropTypes.array
+  list: PropTypes.array,
+  className: PropTypes.string
 }
 
 const PureQues = memo(Question, (prev, next) => {
@@ -28,11 +29,11 @@ const PureQues = memo(Question, (prev, next) => {
 })
 
 function QuestionList(props) {
-  const { list } = props
+  const { list, className } = props
   const textContext = useText()
 
   return (
-    <div>
+    <div className={className}>
       {list.map(item => (
         <PureQues key={item.id} {...item} {...textContext} />
       ))}

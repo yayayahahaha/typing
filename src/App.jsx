@@ -58,7 +58,10 @@ function App() {
     settingClass,
 
     // 正確陣列
-    passList
+    passList,
+
+    // 字串陣列的樣式, 目前用於隱藏
+    textListClassName
   } = useText()
 
   const keyPressHandler = function (event) {
@@ -103,7 +106,7 @@ function App() {
       <StatusBlock mode={mode} sec={sec} passList={passList} />
 
       <div className="inputBlock">
-        <QuestionList list={textList} />
+        <QuestionList className={textListClassName} list={textList} />
         <div>
           <input
             ref={input => setInputDom(input)}

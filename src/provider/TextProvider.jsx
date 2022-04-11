@@ -24,6 +24,9 @@ function TextProvider(props) {
   const [targetWords, setTargetWords] = useState(defaultValue.targetWords) // 目標字數
   const [gamingSec, setGamingSec] = useState(sec)
 
+  const [textListVisible, setHideTextListVisible] = useState(true)
+  const textListClassName = useMemo(() => textListVisible ? '' : 'hide', [textListVisible])
+
   // 模式
   const [mode, setMode] = useState('countdown')
   // 遊戲狀態
@@ -95,6 +98,7 @@ function TextProvider(props) {
       if (Number(sec) <= 0) {
         setGameStatus('end')
         resetClock()
+        setHideTextListVisible(false)
       }
     }
   }, [sec])
@@ -139,7 +143,7 @@ function TextProvider(props) {
   useEffect(() => {
     if (currentIndex < textList.length) return
     if (gameStatus !== 'gaming') return
-    setGameStatus('end')
+    setGameStatus('end') // 這是打完的
   }, [currentIndex])
 
   useEffect(() => {
@@ -180,6 +184,9 @@ function TextProvider(props) {
 
     // 清空輸入字串
     setInputText('')
+
+    // 重新讓字串出現在畫面上
+    setHideTextListVisible(true)
 
     // 讓關注點回到 input 框
     if (focus) inputDom.focus()
@@ -241,7 +248,9 @@ function TextProvider(props) {
         // 正確陣列
         passList,
         // 錯誤陣列
-        wrongList
+        wrongList,
+
+        textListClassName
       }}
     >
       {children}
