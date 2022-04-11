@@ -22,6 +22,4 @@ function StatusBlock(props) {
   return <div>{statusInfo}</div>
 }
 
-export default memo(StatusBlock, ({ passList: { length: pl } }, { passList: { length: nl } }) => {
-  return pl === nl // 長度改變才動作
-}) // TODO 這個好像是比較好的做法?
+export default memo(StatusBlock) // TODO 這個好像是比較好的做法?

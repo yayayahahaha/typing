@@ -16,8 +16,8 @@ function TextProvider(props) {
   const { children } = props
 
   const defaultValue = {
-    sec: 60,
-    targetWords: 60,
+    sec: 3,
+    targetWords: 3,
     gameStatus: 'ready'
   }
 
@@ -31,6 +31,7 @@ function TextProvider(props) {
   const [sec, setSec] = useState(defaultValue.sec) // 秒數，可能是正數也可能是倒數
   const [direction, setDirection] = useState(-1) // 倒數
   const [targetWords, setTargetWords] = useState(defaultValue.targetWords) // 目標字數
+  const [gamingSec, setGamingSec] = useState(sec)
 
   // 模式
   const [mode, setMode] = useState('countdown')
@@ -42,11 +43,43 @@ function TextProvider(props) {
 
   // setting hash
   const settingHash = useMemo(() => {
-    return `${mode}-${sec}-${targetWords}`
-  }, [mode, sec, targetWords])
+    return `${mode}-${targetWords}`
+  }, [mode, targetWords])
 
   const [afterMounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
+
+  useEffect(() => setDirection(mode === 'countdown' ? -1 : 1), [mode])
+
+  const [clock, setClock] = useState(null)
+  useEffect(() => {
+    if (gameStatus !== 'gaming') return
+    if (clock) return
+
+    // 設定此場遊戲的秒數
+    setGamingSec(sec)
+    // 啟動時鐘
+    setClock(
+      setInterval(() => {
+        setSec(sec => sec + direction)
+      }, 1000)
+    )
+  }, [gameStatus])
+  useEffect(() => {
+    if (mode === 'countdown') {
+      // mode ?
+      if (gameStatus !== 'gaming') return
+
+      if (Number(sec) <= 0) {
+        setGameStatus('end')
+        resetClock()
+      }
+    }
+  }, [sec])
+
+  function resetClock() {
+    setClock(clock => clearInterval(clock))
+  }
 
   useEffect(() => {
     if (!afterMounted) return
@@ -109,6 +142,12 @@ function TextProvider(props) {
 
     // 重新產一個陣列
     setTextList(createAnimalList() /* TODO 這裡要根據使用者的設定產出正確的陣列 */)
+
+    // 重新綁定秒數
+    setSec(gamingSec)
+
+    // 重新啟動計時器
+    resetClock()
 
     // 清空輸入字串
     setInputText('')
