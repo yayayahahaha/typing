@@ -156,6 +156,11 @@ function TextProvider(props) {
   }
 
   function reset(config = {}) {
+    // TODO 如果在調整完秒數之後沒有 "開始後點選 reset" 的話
+    // 畫面中的題目數量會維持在上一個秒數算出來的長度
+    // 如果長度太短的話就會遇到使用者提早把項目完成的問題
+    // 還是要改成打完一行就重刷一次新的 animalList ?
+
     const { focus = true } = config
     // 重置遊戲狀態
     setGameStatus(defaultValue.gameStatus)
