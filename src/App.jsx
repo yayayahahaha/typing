@@ -1,5 +1,4 @@
 // TODO -feature-
-// TODO 重置按鈕
 // TODO 自動把要輸入的放到眼前
 // TODO 倒數計時?
 // TODO 打幾個字統計時間?
@@ -9,8 +8,10 @@
 // TODO 樣式
 
 // TODO -program-
+// 改版: 如果上面的 setting 再這樣寫下去的話連動什麼的會變得非常奇怪
+// 還是設定成點擊一個確定按鈕再去處理其他事情比較適合
 
-import React, { memo, useEffect } from 'react'
+import React, { memo } from 'react'
 
 import ModeSwitcher from './ModeSwitcher.jsx'
 import Description from './Description.jsx'
@@ -61,7 +62,9 @@ function App() {
     passList,
 
     // 字串陣列的樣式, 目前用於隱藏
-    textListClassName
+    textListClassName,
+
+    setGamingSec
   } = useText()
 
   const keyPressHandler = function (event) {
@@ -96,7 +99,7 @@ function App() {
 
       <div className={settingClass}>
         <PureModeSwitcher mode={mode} setMode={setMode} />
-        <PureSetting mode={mode} sec={sec} targetWords={targetWords} setSec={setSec} setTargetWords={setTargetWords} />
+        <PureSetting mode={mode} sec={sec} targetWords={targetWords} setSec={setSec} setTargetWords={setTargetWords} setGamingSec={setGamingSec} />
         <PureDescription mode={mode} sec={sec} targetWords={targetWords} />
         <PureBackToDefault defaultValue={defaultValue} setSec={setSec} setTargetWords={setTargetWords} />
       </div>

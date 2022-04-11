@@ -86,8 +86,6 @@ function TextProvider(props) {
     if (gameStatus !== 'gaming') return
     if (clock) return
 
-    // 設定此場遊戲的秒數, 可能會需要更好的方式來判斷'遊戲開始'?
-    setGamingSec(sec)
     // 啟動時鐘
     setClock(setInterval(() => setSec(sec => sec + direction), 1000))
   }, [gameStatus])
@@ -250,7 +248,8 @@ function TextProvider(props) {
         // 錯誤陣列
         wrongList,
 
-        textListClassName
+        textListClassName,
+        setGamingSec
       }}
     >
       {children}

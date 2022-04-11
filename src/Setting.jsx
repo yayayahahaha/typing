@@ -14,7 +14,7 @@ Setting.propTypes = {
 }
 
 function Setting(props) {
-  const { mode, sec, targetWords, setSec, setTargetWords } = props
+  const { mode, sec, targetWords, setSec, setTargetWords, setGamingSec } = props
 
   function secChanged() {
     const {
@@ -34,10 +34,14 @@ function Setting(props) {
     if (!isNumber(value)) return // TODO 錯誤提示
     setTargetWords(Number(value))
   }
+  function blur() {
+    // 設定此場遊戲的秒數, 可能會需要更好的方式來判斷'遊戲開始'?
+    setGamingSec(sec)
+  }
 
   const countdowmSetting = (
     <span>
-      秒數: <input type="text" value={sec} onChange={secChanged} />
+      秒數: <input type="text" value={sec} onChange={secChanged} onBlur={blur} />
     </span>
   )
   const countupSetting = (
