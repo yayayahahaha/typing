@@ -9,8 +9,6 @@ TextProvider.propTypes = {
   children: PropTypes.any
 }
 
-const animalList = createAnimalList()
-
 const TextContext = createContext()
 function TextProvider(props) {
   const { children } = props
@@ -20,13 +18,6 @@ function TextProvider(props) {
     targetWords: 3,
     gameStatus: 'ready'
   }
-
-  const [inputText, setInputText] = useState('')
-  const [textList, setTextList] = useState(animalList)
-  const passList = useMemo(() => {
-    // 好像沒有什麼 deep 不 deep 的問題
-    return textList.filter(item => item.className === 'pass')
-  }, [textList])
 
   const [sec, setSec] = useState(defaultValue.sec) // 秒數，可能是正數也可能是倒數
   const [direction, setDirection] = useState(-1) // 倒數
@@ -38,36 +29,67 @@ function TextProvider(props) {
   // 遊戲狀態
   const [gameStatus, setGameStatus] = useState('ready')
 
-  // setting 的樣式
+  // 輸入框
+  const [inputText, setInputText] = useState('')
+
+  // 題目
+  const [textList, setTextList] = useState([])
+
+  // 正確答案
+  // useMemo 因為都是整個刷掉所以好像沒有什麼 deep 不 deep 的問題
+  const passList = useMemo(() => textList.filter(item => item.className === 'pass'), [textList])
+  // 錯誤答案
+  const wrongList = useMemo(() => textList.filter(item => item.className === 'wrong'), [textList])
+
+  // setting 的樣式, 目前只用來當遮罩
   const settingClass = useMemo(() => `setting-${gameStatus}`, [gameStatus])
 
   // setting hash
-  const settingHash = useMemo(() => {
-    return `${mode}-${targetWords}`
-  }, [mode, targetWords])
+  const settingHash = useMemo(() => `${mode}-${targetWords}`, [mode, targetWords])
+
+  function createAnimalListByMode() {
+    switch (mode) {
+      case 'countdown':
+        return createAnimalList(Number(gamingSec) * 8)
+      case 'countup':
+        return createAnimalList(Number(targetWords))
+      default:
+        console.warn('怎麼會到這裡')
+        return []
+    }
+  }
+  function setDirectionByMode() {
+    switch (mode) {
+      case 'countdown':
+        return setDirection(-1)
+      case 'countup':
+        return setDirection(1)
+      default:
+        console.warn('怎麼會到這裡')
+        return null
+    }
+  }
 
   const [afterMounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
-  useEffect(() => setDirection(mode === 'countdown' ? -1 : 1), [mode])
+  useEffect(() => {
+    setTextList(createAnimalListByMode())
+    setDirectionByMode()
+  }, [mode])
 
   const [clock, setClock] = useState(null)
   useEffect(() => {
     if (gameStatus !== 'gaming') return
     if (clock) return
 
-    // 設定此場遊戲的秒數
+    // 設定此場遊戲的秒數, 可能會需要更好的方式來判斷'遊戲開始'?
     setGamingSec(sec)
     // 啟動時鐘
-    setClock(
-      setInterval(() => {
-        setSec(sec => sec + direction)
-      }, 1000)
-    )
+    setClock(setInterval(() => setSec(sec => sec + direction), 1000))
   }, [gameStatus])
   useEffect(() => {
     if (mode === 'countdown') {
-      // mode ?
       if (gameStatus !== 'gaming') return
 
       if (Number(sec) <= 0) {
@@ -116,6 +138,7 @@ function TextProvider(props) {
 
   useEffect(() => {
     if (currentIndex < textList.length) return
+    if (gameStatus !== 'gaming') return
     setGameStatus('end')
   }, [currentIndex])
 
@@ -140,11 +163,12 @@ function TextProvider(props) {
     // 回到起始座標
     setCurrentIndex(0)
 
-    // 重新產一個陣列
-    setTextList(createAnimalList() /* TODO 這裡要根據使用者的設定產出正確的陣列 */)
-
     // 重新綁定秒數
-    setSec(gamingSec)
+    setSec(() => gamingSec)
+
+    // 重新產一個陣列
+    const list = createAnimalListByMode()
+    setTextList(list)
 
     // 重新啟動計時器
     resetClock()
@@ -210,7 +234,9 @@ function TextProvider(props) {
         settingClass,
 
         // 正確陣列
-        passList
+        passList,
+        // 錯誤陣列
+        wrongList
       }}
     >
       {children}

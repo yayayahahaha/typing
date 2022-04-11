@@ -87,13 +87,6 @@ function App() {
     setInputText(value.trim())
   }
 
-  useEffect(() => {
-    // 模擬 mounted
-    // 幫第一筆綁上 typing 的樣式
-    const firstText = textList[currentIndex]
-    setTextInfo(firstText, { className: 'typing' })
-  }, [])
-
   return (
     <div className="App">
       <span>{gameStatus}</span>
