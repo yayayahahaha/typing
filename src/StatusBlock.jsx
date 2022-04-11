@@ -7,7 +7,7 @@ import CountupStatus from './components/CountupStatus.jsx'
 StatusBlock.propTypes = {
   mode: PropTypes.string,
   passList: PropTypes.array,
-  sec: PropTypes.number
+  sec: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
 function StatusBlock(props) {
