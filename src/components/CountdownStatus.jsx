@@ -1,21 +1,27 @@
-import React, { useEffect } from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 CountdownStatus.propTypes = {
-  mode: PropTypes.string,
-  passList: PropTypes.array
+  passList: PropTypes.array,
+  sec: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
+// Countdown: 幾秒鐘內可以完成幾個字
 function CountdownStatus(props) {
-  // NEXT 處理遊戲開始後的呈現細節
+  const { passList, sec } = props
 
-  const { mode, passList, sec, targetWords } = props
+  const completeWords = useMemo(() => passList.length, [passList])
 
-  useEffect(() => {
-    console.log('whyyyyyyy', passList)
-  }, [passList])
-
-  return <div>CountdownStatus</div>
+  return (
+    <div>
+      <p>
+        剩餘秒數: <span>{sec}</span>
+      </p>
+      <p>
+        完成字數: <span>{completeWords}</span>
+      </p>
+    </div>
+  )
 }
 
 export default CountdownStatus
