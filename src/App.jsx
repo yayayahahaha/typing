@@ -1,5 +1,4 @@
 // TODO -feature-
-// TODO 重置按鈕
 // TODO 自動把要輸入的放到眼前
 // TODO 倒數計時?
 // TODO 打幾個字統計時間?
@@ -9,18 +8,21 @@
 // TODO 樣式
 
 // TODO -program-
+// 改版: 如果上面的 setting 再這樣寫下去的話連動什麼的會變得非常奇怪
+// 還是設定成點擊一個確定按鈕再去處理其他事情比較適合
 
-import React, { memo, useEffect } from 'react'
+import React, { memo } from 'react'
 
 import ModeSwitcher from './ModeSwitcher.jsx'
 import Description from './Description.jsx'
 import Setting from './Setting.jsx'
 import BackToDefault from './BackToDefault.jsx'
+import StatusBlock from './StatusBlock.jsx'
 
 import QuestionList from './components/QuestionList.jsx'
 import { useText } from './provider/TextProvider.jsx'
 
-import './App.css'
+import './App.scss'
 
 const PureModeSwitcher = memo(ModeSwitcher)
 const PureSetting = memo(Setting)
@@ -40,22 +42,40 @@ function App() {
     setInputDom,
     reset,
 
+    gameStatus,
+    setGameStatus,
+
     // 給 ModeSwitcher 用的
     sec,
     targetWords,
     mode,
     setMode,
-
     // 給 Setting 用的
     setSec,
     setTargetWords,
+    // 給 back-to-default 用的
+    defaultValue,
+    // 用於遮罩
+    settingClass,
 
-    defaultValue
+    // 正確陣列
+    passList,
+
+    // 字串陣列的樣式, 目前用於隱藏
+    textListClassName,
+
+    setGamingSec
   } = useText()
 
-  const keyUpHandler = function (event) {
+  const keyPressHandler = function (event) {
+    if (gameStatus !== 'end') setGameStatus('gaming')
+
     const code = event.code
     if (code !== 'Space') return
+
+    // 清空輸入框
+    setInputText('')
+    if (gameStatus === 'end') return
 
     // 使用者按了空白，也就是送出
     const checkInput = inputText.trim()
@@ -66,45 +86,50 @@ function App() {
 
     // 移動題目
     setCurrentIndex(i => i + 1)
-
-    // 清空輸入框
-    setInputText('')
   }
   const onChangeHandler = function (event) {
     const value = event.target.value
-    setInputText(value)
-  }
 
-  useEffect(() => {
-    // 模擬 mounted
-    // 幫第一筆綁上 typing 的樣式
-    const firstText = textList[currentIndex]
-    setTextInfo(firstText, { className: 'typing' })
-  }, [])
+    setInputText(value.trim())
+  }
 
   return (
     <div className="App">
-      <PureModeSwitcher mode={mode} setMode={setMode} />
+      <span>{gameStatus}</span>
 
-      <PureSetting mode={mode} sec={sec} targetWords={targetWords} setSec={setSec} setTargetWords={setTargetWords} />
-      <PureDescription mode={mode} sec={sec} targetWords={targetWords} />
-      <PureBackToDefault defaultValue={defaultValue} setSec={setSec} setTargetWords={setTargetWords} />
+      <div className={settingClass}>
+        <PureModeSwitcher mode={mode} setMode={setMode} />
+        <PureSetting
+          mode={mode}
+          sec={sec}
+          targetWords={targetWords}
+          setSec={setSec}
+          setTargetWords={setTargetWords}
+          setGamingSec={setGamingSec}
+        />
+        <PureDescription mode={mode} sec={sec} targetWords={targetWords} />
+        <PureBackToDefault defaultValue={defaultValue} setSec={setSec} setTargetWords={setTargetWords} />
+      </div>
 
       <hr />
 
-      <QuestionList list={textList} />
-      <div>
-        <input
-          ref={input => setInputDom(input)}
-          autoFocus
-          type="text"
-          value={inputText}
-          onChange={onChangeHandler}
-          onKeyUp={keyUpHandler}
-        />
-        <button className="reset-button" onClick={reset}>
-          Reset
-        </button>
+      <StatusBlock mode={mode} sec={sec} passList={passList} />
+
+      <div className="inputBlock">
+        <QuestionList className={textListClassName} list={textList} />
+        <div>
+          <input
+            ref={input => setInputDom(input)}
+            autoFocus
+            type="text"
+            value={inputText}
+            onChange={onChangeHandler}
+            onKeyPress={keyPressHandler}
+          />
+          <button className="reset-button" onClick={reset}>
+            Reset
+          </button>
+        </div>
       </div>
     </div>
   )

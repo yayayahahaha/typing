@@ -1,0 +1,44 @@
+/* TODO 用 scss 或 windicss */
+/* span 的外面要包一層 class, 用 scss 會比較好寫  */
+/* setting- 的外面要包一層 class, 用 scss 會比較好寫  */
+span {
+  margin: 0px 5px;
+  transition: all 0.3s;
+  transform: rotate(0deg);
+  // background-image: linear-gradient(red, blue); // 用來測試 postcss 和 browserslistrc 的
+
+  &.normal {
+    color: gray;
+  }
+  &.pass {
+    color: green;
+  }
+  &.wrong {
+    color: red;
+  }
+  &.typing {
+    color: black;
+
+    &.good {
+      background: #64f15a;
+    }
+    &.bad {
+      background: #e92326;
+    }
+  }
+}
+
+.reset-button {
+  margin-left: 3px;
+}
+
+.setting-ready {
+}
+.setting-gaming {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.hide {
+  display: none;
+}
