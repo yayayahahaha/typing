@@ -22,7 +22,7 @@ import StatusBlock from './StatusBlock.jsx'
 import QuestionList from './components/QuestionList.jsx'
 import { useText } from './provider/TextProvider.jsx'
 
-import './App.css'
+import './App.scss'
 
 const PureModeSwitcher = memo(ModeSwitcher)
 const PureSetting = memo(Setting)
@@ -99,7 +99,14 @@ function App() {
 
       <div className={settingClass}>
         <PureModeSwitcher mode={mode} setMode={setMode} />
-        <PureSetting mode={mode} sec={sec} targetWords={targetWords} setSec={setSec} setTargetWords={setTargetWords} setGamingSec={setGamingSec} />
+        <PureSetting
+          mode={mode}
+          sec={sec}
+          targetWords={targetWords}
+          setSec={setSec}
+          setTargetWords={setTargetWords}
+          setGamingSec={setGamingSec}
+        />
         <PureDescription mode={mode} sec={sec} targetWords={targetWords} />
         <PureBackToDefault defaultValue={defaultValue} setSec={setSec} setTargetWords={setTargetWords} />
       </div>

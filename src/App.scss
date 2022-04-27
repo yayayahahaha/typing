@@ -3,24 +3,26 @@
 /* setting- 的外面要包一層 class, 用 scss 會比較好寫  */
 span {
   margin: 0px 5px;
-}
-span.normal {
-  color: gray;
-}
-span.pass {
-  color: green;
-}
-span.wrong {
-  color: red;
-}
-span.typing {
-  color: black;
-}
-span.typing.good {
-  background: #64f15a;
-}
-span.typing.bad {
-  background: #e92326;
+
+  &.normal {
+    color: gray;
+  }
+  &.pass {
+    color: green;
+  }
+  &.wrong {
+    color: red;
+  }
+  &.typing {
+    color: black;
+
+    &.good {
+      background: #64f15a;
+    }
+    &.bad {
+      background: #e92326;
+    }
+  }
 }
 
 .reset-button {
